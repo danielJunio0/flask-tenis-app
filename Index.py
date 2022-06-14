@@ -26,9 +26,6 @@ def homepage():
         cursor.execute("Select * from produtos")
 
         produtos = cursor.fetchall()
-
-        for produto in produtos:
-            print(produto[1])
         
         return render_template("homepage.html", produtos=produtos)
     else:
@@ -40,7 +37,6 @@ def login():
     if request.method == 'POST' and 'email' in request.form and 'senha' in request.form:
         email = request.form['email']
         senha = request.form['senha']
-        print(senha)
 
         cursor.execute("Select * from usuarios WHERE email = %s and senha = %s",(email, senha))
 
@@ -64,7 +60,6 @@ def cadastro():
         nome = request.form['nome']
         email = request.form['email']
         senha = request.form['senha']
-        print("Email: " , email)
         cursor.execute("SELECT * FROM usuarios WHERE email = %s", (email,))
 
         conta = cursor.fetchone()
@@ -94,6 +89,14 @@ def cadastroproduto():
         return redirect(url_for('homepage'))
 
     return render_template("cadastro-produto.html")
+
+@app.route('/deletar/<id>')
+def deletar(id):
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM produtos Where id = %s",(id))
+
+    conn.commit()
+    return redirect(url_for("homepage"))
 
 @app.route("/logout")
 def logout():

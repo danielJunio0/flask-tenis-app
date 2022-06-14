@@ -1,5 +1,15 @@
-.personal{
+.personal {
     padding-top: 20px;
     display: flex;
     justify-content: space-around;
+}
+
+.card{
+    background: #fff;
+    width: 450px;
+    border-radius: 16px;
+    box-shadow: 0 0 128px 0 rgb(0 0 0 / 10%), 0 32px 64px -48px rgb(0 0 0 / 50%);
+}
+.card img{
+    border-radius: 16px;
 }

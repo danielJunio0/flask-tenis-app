@@ -18,7 +18,7 @@
         crossorigin="anonymous"></script>
 </head>
 
-<body>
+<body style="background-color: #2c2c2e;">
     <div class="container-login">
         <section>
             <form action="{{ url_for('cadastro') }}" method="post">
@@ -34,6 +34,9 @@
                     <label for="senha">Senha</label>
                     <input type="password" class="form-control" name="senha" id="senha" placeholder="Digite a Senha">
                 </div>
+                <section>Já possui conta?
+                    <a href="{{ url_for('login') }}">Logar</a>
+                </section>
                 <button type="submit" value="cadastrar" class="btn btn-dark">Cadastrar</button>
             </form>
             {% with messages = get_flashed_messages() %}
@@ -41,8 +44,8 @@
             {% for message in messages %}
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 {{ message }}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>
-                <span aria-hidden="true">×</span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">×</span>
                 </button>
             </div>
             {% endfor %}

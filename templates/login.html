@@ -18,7 +18,7 @@
         crossorigin="anonymous"></script>
 </head>
 
-<body>
+<body style="background-color: #2c2c2e;">
     <div class="container-login">
         <section>
             <form action="{{ url_for('login') }}" method="post">
@@ -32,17 +32,19 @@
                     <input type="password" class="form-control" name="senha" id="senha" required
                         placeholder="Digite a Senha">
                 </div>
-                <a href="{{ url_for('cadastro') }}">Cadastre-se</a>
+                <section>
+                    Não possui Conta?
+                    <a href="{{ url_for('cadastro') }}">Cadastre-se</a>
+                </section>
                 <button type="submit" value="login" class="btn btn-dark">Logar</button>
             </form>
             {% with messages = get_flashed_messages() %}
             {% if messages %}
             {% for message in messages %}
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
                 {{ message }}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>
-                <span aria-hidden="true">×</span>
-                </button>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                        aria-hidden="true">×</span></button>
             </div>
             {% endfor %}
             {% endif %}
