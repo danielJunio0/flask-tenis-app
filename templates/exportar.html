@@ -1,0 +1,17 @@
+{% extends "layout.html"%}
+{%block content%}
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/exportar.css') }}">
+<h4 style="display: flex; justify-content: center; margin-top: 20px;">
+    EXPORTAR DADOS
+</h4>
+<form action="{{ url_for('exportar') }}" method="post">
+    <div class="container-exportar">
+        <div class="cadastro-btn">
+            <button type="submit" class="btn btn-dark" ><i class="fa-solid fa-download"></i> Exportar
+                Dados em Json</button>
+        </div>
+    </div>
+</form>
+
+
+{%endblock%}

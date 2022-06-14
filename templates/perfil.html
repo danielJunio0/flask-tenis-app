@@ -1,8 +1,30 @@
 {% extends "layout.html"%}
 {%block content%}
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/perfil.css') }}">
+
 <div class="perfil">
-    <h1>Perfil</h1>
-    <p>teste</p>
+    <div class="header">
+        <div class="image">
+            <img src="{{ url_for('static', filename='images/fabricio.png') }}" alt="">
+        </div>
+        <div>
+            <strong>{{usuario[1]}}</strong>
+        </div>
+    </div>
+    <div class="container-body">
+        <div class="container-perfil" style="width: 450px;">
+            <form action="{{ url_for('cadastro') }}" method="post">
+                <div class="form-group">
+                    <label for="email">E-Mail</label>
+                    <input type="email" name="email" class="form-control" id="email" value="{{usuario[2]}}"
+                        placeholder="Digite o Email">
+                </div>
+                <button type="submit" value="cadastrar" class="btn btn-dark">Editar</button>
+            </form>
+        </div>
+    </div>
+
+    
 </div>
 
 {%endblock%}

@@ -1,0 +1,30 @@
+.header {
+    margin-top: 50px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.image img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+}
+
+.container-body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+}
+
+.container-perfil {
+    width: 450px;
+    border-radius: 16px;
+    box-shadow: 0 0 128px 0 rgba(112, 112, 112, 0.1), 0 32px 64px -48px rgba(255, 255, 255, 0.5);
+}
+
+form {
+    padding: 25px 30px;
+}

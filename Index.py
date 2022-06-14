@@ -1,6 +1,11 @@
 from flask import Flask, render_template, url_for, session, redirect, request, flash
 import psycopg2 as pg
 import random
+import json
+import zipfile as zip
+import os
+from urllib.request import Request, urlopen
+
 app = Flask(__name__)
 app.secret_key = "daniel"
 
@@ -24,10 +29,10 @@ def homepage():
     if "logado" in session:
         cursor = conn.cursor()
         cursor.execute("Select * from produtos")
-
+        email = session["email"]
         produtos = cursor.fetchall()
-        
-        return render_template("homepage.html", produtos=produtos)
+        print(produtos)
+        return render_template("homepage.html", produtos=produtos, email = email )
     else:
         return redirect(url_for("login"))
 
@@ -41,11 +46,11 @@ def login():
         cursor.execute("Select * from usuarios WHERE email = %s and senha = %s",(email, senha))
 
         conta = cursor.fetchone()
-
+        print(conta)
         if conta:
             session['logado'] = True
-            # session['nome'] = conta['nome']
-            # session['email'] = conta['email']
+            session['nome'] = conta[1]
+            session['email'] = conta[2]
             return redirect(url_for('homepage'))
         else:
             flash('Usuário ou senha inválido!')
@@ -100,7 +105,9 @@ def deletar(id):
 
 @app.route("/logout")
 def logout():
-    session.pop("user", None)
+    session.pop("logado", None)
+    session.pop("nome", None)
+    session.pop("email", None)
     return redirect(url_for("login"))
 
 @app.route("/user")
@@ -115,9 +122,50 @@ def user():
 def sobre():
     return render_template("sobre.html")
 
-@app.route("/perfil/<nome_usuario>")
-def perfil(nome_usuario):
-    return render_template("perfil.html", nome_usuario=nome_usuario)
+@app.route("/exportar", methods=["POST","GET"])
+def exportar():
+    if request.method == 'POST':
+        cursor = conn.cursor()
+        cursor.execute("SELECT row_to_json(p) FROM produtos AS p")
+
+        produtosJson = cursor.fetchall()
+        print(produtosJson)
+
+        with open('produtos.json', 'w') as fp:
+            json.dump(produtosJson, fp)
+
+        path_zip = os.path.join(os.sep, os.getcwd(),"arquivoJson.zip")
+        zf = zip.ZipFile(path_zip, "w")
+
+        zf.write(os.path.join(os.getcwd(),"produtos.json"))
+
+        zf.close()
+
+        return redirect(url_for("exportar"))
+    return render_template("exportar.html")
+
+@app.route("/importar", methods=["POST","GET"])
+def importar():    
+    cursor = conn.cursor()
+    if request.method == 'POST':
+        URL = request.form['url']
+        req = Request(URL, headers={'User-Agent': 'Mozilla/5.0'})
+        response = urlopen(req).read()
+        print(response)
+        if response:
+            cursor.execute("INSERT INTO Importados (valor) VALUES (%s)",(response))
+            conn.commit()
+        return render_template("importar.html", valores=response)
+    else:
+        return render_template("importar.html")
+
+@app.route("/perfil/<email>")
+def perfil(email):
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM usuarios WHERE email = %s", (email,))
+    usuario = cursor.fetchone()
+
+    return render_template("perfil.html", usuario=usuario)
 
 
 

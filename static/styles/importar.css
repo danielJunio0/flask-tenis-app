@@ -1,0 +1,12 @@
+
+.container-importar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin-top: 15%;
+}
+.container-importar input{
+    width: 400px;
+    margin-bottom: 20px;
+}

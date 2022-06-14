@@ -23,10 +23,26 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('sobre') }}">Sobre</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('exportar') }}">Exportar Dados</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('importar') }}">Importar Dados</a>
+                </li>
             </ul>
-            <div class="my-2 my-lg-0">
-                <a class="nav-link" href="{{ url_for('sobre') }}">{{session['nome']}}</a>
-            </div>
+            {% if email %}
+            <li class="nav-item dropdown">
+                <a style="color: white;" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                    {{email}}
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="{{ url_for('perfil', email = email) }}">Perfil</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="{{ url_for('logout') }}">Sair</a>
+                </div>
+            </li>
+            {% endif %}
         </div>
     </nav>
 
