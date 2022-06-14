@@ -8,11 +8,20 @@
     <div class="container-importar">
         <input type="text" name="url" class="form-control" id="url" required placeholder="Digite a URL">
         <div class="cadastro-btn">
-            <button type="submit" class="btn btn-dark" ><i class="fa-solid fa-upload"></i> Importar
+            <button type="submit" class="btn btn-dark"><i class="fa-solid fa-upload"></i> Importar
                 Dados</button>
         </div>
     </div>
 </form>
+{% if valores %}
+<div>
+    <ul>
+        {% for valor in valores%}
+        <li>{{valor}}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
 
 
 {%endblock%}

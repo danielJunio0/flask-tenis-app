@@ -4,7 +4,7 @@ import random
 import json
 import zipfile as zip
 import os
-from urllib.request import Request, urlopen
+import requests
 
 app = Flask(__name__)
 app.secret_key = "daniel"
@@ -80,20 +80,24 @@ def cadastro():
     return render_template("cadastro.html")
 
 @app.route("/cadastroproduto", methods=["POST","GET"])
-def cadastroproduto():
-    cursor = conn.cursor()
-    if request.method == 'POST' and 'nome' in request.form and 'descricao' in request.form and 'marca' in request.form and 'preco' in request.form:
-        nome = request.form['nome']
-        descricao = request.form['descricao']
-        marca = request.form['marca']
-        preco = request.form['preco']
-        imagem = random.choice(imagens)        
+def cadastroproduto():    
+    if "logado" in session:
+        cursor = conn.cursor()
+        if request.method == 'POST' and 'nome' in request.form and 'descricao' in request.form and 'marca' in request.form and 'preco' in request.form:
+            nome = request.form['nome']
+            descricao = request.form['descricao']
+            marca = request.form['marca']
+            preco = request.form['preco']
+            imagem = random.choice(imagens)        
 
-        cursor.execute("INSERT INTO produtos (nome, descricao, marca, imagem, preco) VALUES (%s, %s, %s, %s, %s)",(nome, descricao, marca, imagem, preco))
-        conn.commit()
-        return redirect(url_for('homepage'))
+            cursor.execute("INSERT INTO produtos (nome, descricao, marca, imagem, preco) VALUES (%s, %s, %s, %s, %s)",(nome, descricao, marca, imagem, preco))
+            conn.commit()
+            return redirect(url_for('homepage'))
+        else:
+            return render_template("cadastro-produto.html")
+    else:
+        return redirect(url_for("login"))
 
-    return render_template("cadastro-produto.html")
 
 @app.route('/deletar/<id>')
 def deletar(id):
@@ -119,8 +123,11 @@ def user():
         return redirect(url_for("login"))
 
 @app.route("/sobre")
-def sobre():
-    return render_template("sobre.html")
+def sobre():    
+    if "logado" in session:
+        return render_template("sobre.html")
+    else:
+        return redirect(url_for("login"))
 
 @app.route("/exportar", methods=["POST","GET"])
 def exportar():
@@ -149,15 +156,18 @@ def importar():
     cursor = conn.cursor()
     if request.method == 'POST':
         URL = request.form['url']
-        req = Request(URL, headers={'User-Agent': 'Mozilla/5.0'})
-        response = urlopen(req).read()
-        print(response)
+        headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
+
+        response = requests.get(URL, headers=headers)
+        print(response.content)
         if response:
-            cursor.execute("INSERT INTO Importados (valor) VALUES (%s)",(response))
+            cursor.execute("INSERT INTO importados (valor) VALUES (%s)",(response.content,))
             conn.commit()
         return render_template("importar.html", valores=response)
     else:
-        return render_template("importar.html")
+        cursor.execute("Select * from importados")
+        valores = cursor.fetchall()
+        return render_template("importar.html", valores = valores)
 
 @app.route("/perfil/<email>")
 def perfil(email):
