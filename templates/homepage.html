@@ -1,0 +1,24 @@
+{% extends "layout.html"%}
+{%block content%}
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/homepage.css') }}">
+<div class="home">
+    <div class="cadastro-btn">
+        <a class="btn btn-dark" href="{{ url_for('cadastroproduto') }}">Cadastrar Produto</a>         
+    </div>
+
+    <div class="cards">
+        <div class="field">
+            {% for produto in produtos %}
+            <div class="card" style="margin: 10px;">
+                <img src="{{ produto[4] }}" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">{{produto[1]}}</h5>
+                    <p class="card-text">R$ {{produto[5]}}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+{%endblock%}

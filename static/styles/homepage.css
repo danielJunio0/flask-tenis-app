@@ -1,0 +1,15 @@
+.cards{
+    padding:20px;
+}
+.cadastro-btn{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.field{
+    display: flex;
+    flex-direction: row;
+}
+.cadastro-btn a{
+    margin: 25px;
+}
